@@ -489,9 +489,13 @@ namespace Baner.Recepcion.DataLayer
                 var oppcurrentstatus = _OpportunityRepository.RetrieveStatusById(idOportunidad);
 
                 //¿Se evaluarán estos dos casos (4 y 3)?
-                if (oppcurrentstatus == 4) //Cerrada
+                if (string.IsNullOrWhiteSpace(obj.StatusOpo))
                 {
-                    _OpportunityRepository.ReopenOpportunity(Opportunity.EntityLogicalName, idOportunidad);
+                    //¿Se evaluarán estos dos casos (4 y 3)?
+                    if (oppcurrentstatus == 4) //Cerrada
+                    {
+                        _OpportunityRepository.ReopenOpportunity(Opportunity.EntityLogicalName, idOportunidad);
+                    }
                 }
                 //Si la oportunidad ya fue ganada no debe permitir ningun cambio
                 else if (oppcurrentstatus == 3) //Ganada
