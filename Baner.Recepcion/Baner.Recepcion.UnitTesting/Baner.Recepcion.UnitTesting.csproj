@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DBE159B1-FD1B-471F-8C1A-8691A197C64E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Baner.Recepcion.UnitTesting</RootNamespace>
+    <AssemblyName>Baner.Recepcion.UnitTesting</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Desarrollo|AnyCPU'">
+    <OutputPath>bin\Desarrollo\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CRMSDK2016Core.1.0.0.2\lib\net452\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CRMSDK2016Core.1.0.0.2\lib\net452\Microsoft.Xrm.Sdk.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CRMSDK2016Core.1.0.0.2\lib\net452\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CRMSDK2016Core.1.0.0.2\lib\net452\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.5.21.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.5.21\lib\net45\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="AdmitidoProcesorTest.cs" />
+    <Compile Include="CambiaSolicitudAdmisionControllerTest.cs" />
+    <Compile Include="CambioDomicilioProcessorTest.cs" />
+    <Compile Include="CambioTipoAdmisionProcessorTest.cs" />
+    <Compile Include="DatosPersonaProcessorTest.cs" />
+    <Compile Include="EstatusAlumnoProcessorTest.cs" />
+    <Compile Include="FechaExamenAdmisionTest.cs" />
+    <Compile Include="NuevoIngresoProcessorTest.cs" />
+    <Compile Include="OtorgamientoBecaTest.cs" />
+    <Compile Include="PreUniversitarioTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProspectProcessorTest.cs" />
+    <Compile Include="ExaminadoProcesorTest.cs" />
+    <Compile Include="InscritoProcesorTest.cs" />
+    <Compile Include="ResultadoExamenTest.cs" />
+    <Compile Include="PropedeuticoProcessorTest.cs" />
+    <Compile Include="ExaminadoPIProcessorTest.cs" />
+    <Compile Include="RechazadoProcessorTest.cs" />
+    <Compile Include="SolicitaBecaProcessorTest.cs" />
+    <Compile Include="OtorgaCreditoProcessorTest.cs" />
+    <Compile Include="TransferenciaProcessorTest.cs" />
+    <Compile Include="CambioSGASTDNProcessorTest.cs" />
+    <Compile Include="DatosPrepaProcessorTest.cs" />
+    <Compile Include="ParentescoProcessorTest.cs" />
+    <Compile Include="CatalogoPeriodosProcessorTest.cs" />
+    <Compile Include="CatalogoColegiosProcessorTest.cs" />
+    <Compile Include="CambiaTelefonoProcessorTest.cs" />
+    <Compile Include="CambiaEmailProcessorTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Baner.Recepcion.BusinessLayer\Baner.Recepcion.BusinessLayer.csproj">
+      <Project>{48c22f59-b8a6-4931-a1f3-5c05ec131b31}</Project>
+      <Name>Baner.Recepcion.BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Baner.Recepcion.BusinessTypes\Baner.Recepcion.BusinessTypes.csproj">
+      <Project>{aabc3f74-3ede-4543-bb8a-27b2023fe5da}</Project>
+      <Name>Baner.Recepcion.BusinessTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Baner.Recepcion.DataInterfaces\Baner.Recepcion.DataInterfaces.csproj">
+      <Project>{d5a4115b-3799-4896-85db-4e71d45b61ca}</Project>
+      <Name>Baner.Recepcion.DataInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Baner.Recepcion.OperationalManagement\Baner.Recepcion.OperationalManagement.csproj">
+      <Project>{b05790cd-c40b-4316-8a13-1eb7dad5bf3b}</Project>
+      <Name>Baner.Recepcion.OperationalManagement</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
