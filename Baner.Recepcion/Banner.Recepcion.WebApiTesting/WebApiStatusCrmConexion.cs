@@ -17,25 +17,12 @@ namespace Banner.Recepcion.WebApiTesting
     public class WebApiStatusCrmConexion
     {
 
-        ILogger _logger;
-        IMonitoreoConexion _MonitoreoConexion;
-        IMonitoreoProcessor _MonitoreoProcessor;
-       
         srvStatusConexionCRMController _SrvStatusCrm;
 
         [TestInitialize]
         public void Initializate()
         {
-            _logger = new DebugerLogger();
-            //_catalogrepository = new CatalogRepository();
-            //_picklistrepository = new PickListRepository();
-            //opportunityRepository = new OpportunityRepository();
-            //_prospectRepository = new ProspectRepository(_catalogrepository, _picklistrepository, opportunityRepository);
-            _MonitoreoConexion = new MonitorearConexionCrm();
-            //_prospectprocessor = new ProspectProcessor(_logger, _prospectRepository);
-            _MonitoreoProcessor = new MonitoreoProcessor(_logger, _MonitoreoConexion);
-            //_servCambioExaminado = new srvCambioExaminadoController(_logger, _prospectprocessor);
-            _SrvStatusCrm = new srvStatusConexionCRMController(_logger, _MonitoreoConexion);
+            _SrvStatusCrm = new srvStatusConexionCRMController();
             _SrvStatusCrm.Request = new HttpRequestMessage()
             {
                 Properties = { { HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration() } }
@@ -50,7 +37,7 @@ namespace Banner.Recepcion.WebApiTesting
             if (resultado.StatusCode != HttpStatusCode.OK)
             {
                 var msgresultado = resultado.Content.ReadAsStringAsync().Result;
-                _logger.Infomacion(msgresultado);
+               
             }
 
         }
