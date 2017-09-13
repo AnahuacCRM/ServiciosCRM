@@ -1,0 +1,5 @@
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\bin\Debug\Baner.Recepcion.OperationalManagement.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\bin\Debug\Baner.Recepcion.OperationalManagement.pdb
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\obj\Debug\Baner.Recepcion.OperationalManagement.csprojResolveAssemblyReference.cache
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\obj\Debug\Baner.Recepcion.OperationalManagement.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\obj\Debug\Baner.Recepcion.OperationalManagement.pdb

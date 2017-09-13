@@ -1,0 +1,11 @@
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.BusinessInterfaces.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.BusinessInterfaces.pdb
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.BusinessTypes.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.DataInterfaces.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.OperationalManagement.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.DataInterfaces.pdb
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.BusinessTypes.pdb
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.OperationalManagement.pdb
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\obj\Debug\Baner.Recepcion.BusinessInterfaces.csprojResolveAssemblyReference.cache
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\obj\Debug\Baner.Recepcion.BusinessInterfaces.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\obj\Debug\Baner.Recepcion.BusinessInterfaces.pdb

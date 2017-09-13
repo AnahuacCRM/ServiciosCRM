@@ -1,0 +1,7 @@
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\bin\Debug\Banner.Recepcion.CRMTypes.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\bin\Debug\Banner.Recepcion.CRMTypes.pdb
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\bin\Debug\Microsoft.Crm.Sdk.Proxy.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\bin\Debug\Microsoft.Xrm.Sdk.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\obj\Debug\Banner.Recepcion.CRMTypes.csprojResolveAssemblyReference.cache
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\obj\Debug\Banner.Recepcion.CRMTypes.dll
+C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\obj\Debug\Banner.Recepcion.CRMTypes.pdb
