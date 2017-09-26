@@ -71,6 +71,8 @@ namespace Baner.Recepcion.BusinessInterfaces
 
         Guid FormulariosBecarios(Becario becario);
 
+        bool HaYRegistrosEnCuenta();
+
         List<RepOportunidades> ObtenerDatosReport();
 
 

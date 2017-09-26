@@ -44,13 +44,13 @@ namespace Banner.Recepcion.WebApiTesting
 
             entity = new ResultadoExamen()
             {
-                id_Cuenta = "e987a773-163b-e711-810e-e0071b6a82a1",
+                id_Cuenta = "721f0324-e981-e711-80ee-3863bb2e34c0",
                 VPDI = "UAM",
                 ResultadosdeExamen = new System.Collections.Generic.List<InformacionResultado>() {
-                    new InformacionResultado("MMPI", new CustomDate(){ Year = 2017, Month = 5, Day = 18 }),
-                    new InformacionResultado("PARA", new CustomDate(){ Year = 2017, Month = 5, Day = 18 }),
-                    new InformacionResultado("PAAV", new CustomDate(){ Year = 2017, Month = 5, Day = 18 }),
-                    new InformacionResultado("PAAN", new CustomDate(){ Year = 2017, Month = 5, Day = 18 })
+                   new InformacionResultado("MMPI", new CustomDate(){ Year = 2017, Month = 9, Day = 4 }),
+                    //new InformacionResultado("PARA", new CustomDate(){ Year = 2017, Month = 5, Day = 18 }),
+                    //new InformacionResultado("PAAV", new CustomDate(){ Year = 2017, Month = 5, Day = 18 }),
+                    //new InformacionResultado("PAAN", new CustomDate(){ Year = 2017, Month = 5, Day = 18 })
                 }
             };
         }

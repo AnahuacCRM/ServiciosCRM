@@ -695,6 +695,24 @@ namespace Baner.Recepcion.BusinessLayer
                 throw;
             }
         }
+
+
+        public bool HaYRegistrosEnCuenta()
+        {
+            try
+            {
+
+                //Asignar nuevo usuario creador por vpd
+
+                return _prospectRepository.HaYRegistrosEnCuenta();
+            }
+            catch (Exception Ex)
+            {
+                _logger.Error(Ex.Build());
+                throw;
+            }
+
+        }
         public List<RepOportunidades> ObtenerDatosReport()
         {
             try

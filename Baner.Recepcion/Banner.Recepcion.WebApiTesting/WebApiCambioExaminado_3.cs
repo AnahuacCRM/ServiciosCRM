@@ -42,7 +42,7 @@ namespace Banner.Recepcion.WebApiTesting
                 Properties = { { HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration() } }
             };
 
-            entity = new Examinado("a66c75a9-5a63-e711-811b-e0071b6a9211", "UAN", "LC-CFAM-16", "6.6", "N","N");
+            entity = new Examinado("721f0324-e981-e711-80ee-3863bb2e34c0", "UAM", "LC-CFAM-16", "6.6", "N","N");
         }
 
         [TestMethod]

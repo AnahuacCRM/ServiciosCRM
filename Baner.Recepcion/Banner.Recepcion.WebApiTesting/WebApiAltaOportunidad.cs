@@ -53,20 +53,20 @@ namespace Banner.Recepcion.WebApiTesting
         {
             VOporunidad = new Oportunidad
             {
-                id_Cuenta = "0bd12d1e-c37b-e711-811b-e0071b669e71",
+                id_Cuenta = "c9c7f96a-eb7e-e711-80fa-3863bb35acf0",
                 //id_Cuenta= "292887b5-b366-e711-8104-5065f38a9b71",
                 id_Oportunidad = "",
-                Numero_Solicitud = 1,
-                VPD = "UAN",
-                Campus = "UAN",
+                Numero_Solicitud = 2,
+                VPD = "UAM",
+                Campus = "UAM",
                 Estatus_Solicitud = "D",
 
-                Periodo = "201760",
+                Periodo = "201810",
                 Nivel = "LC",
-                Programa = "LC-ACTU-16",
-                Escuela = "IN",
-                Codigo_Tipo_Alumno = "S",
-                Codigo_Tipo_admision = "AA"// "AD"
+                Programa = "LC-DIND-16",
+                Escuela = "DI",
+                Codigo_Tipo_Alumno = "N",
+                Codigo_Tipo_admision = "AD"// "AD"
             };
             var res = _AltaOportunidad.Create(VOporunidad);
 

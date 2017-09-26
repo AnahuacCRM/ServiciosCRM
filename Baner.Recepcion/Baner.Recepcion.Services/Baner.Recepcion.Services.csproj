@@ -1052,7 +1052,6 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AltaProspectoBannerController.cs" />
     <Compile Include="Controllers\CreateAccountController.cs" />
-    <Compile Include="Controllers\pruebaController.cs" />
     <Compile Include="Controllers\srvAltaOportunidadController.cs" />
     <Compile Include="Controllers\srvAltaOtorgaBecaController.cs" />
     <Compile Include="Controllers\srvAltaPreUniversitarioBecarioController.cs" />

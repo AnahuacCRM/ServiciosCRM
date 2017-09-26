@@ -1181,8 +1181,30 @@ namespace Baner.Recepcion.DataLayer
                         throw new InvalidExamCoode(string.Format("El codigo de Examen proporcionado no es valido {0}", itemResultEx.CodigoExamen));
                 }
             }
+
+            //Cuando llegan todas las obligatorias
             if (op.ua_fecha_paan != null && op.ua_fecha_para != null && op.ua_fecha_paav != null)
                 op.ua_paa = true;
+            //Cuando llega una que no es de las obligatorias
+            else if (op.ua_fecha_paan == null && op.ua_fecha_para == null && op.ua_fecha_paav == null)
+                op.ua_paa = ExistenFechasExamen(ListOportunidadesII[0], "ua_fecha_paan", "ua_fecha_para", "ua_fecha_paav");
+            else if (op.ua_fecha_paan != null && op.ua_fecha_para != null) //Cuando llegan dos de las obligatorias
+                op.ua_paa = ExistenFechasExamen(ListOportunidadesII[0], "ua_fecha_paav", "", "");
+            else if (op.ua_fecha_paan != null && op.ua_fecha_paav != null) //Cuando llegan dos de las obligatorias
+                op.ua_paa = ExistenFechasExamen(ListOportunidadesII[0], "ua_fecha_para", "", "");
+            else if (op.ua_fecha_para != null && op.ua_fecha_paav != null) //Cuando llegan dos de las obligatorias
+                op.ua_paa = ExistenFechasExamen(ListOportunidadesII[0], "ua_fecha_paan", "", "");
+            //cuando llena una de las obligatorias
+            else if (op.ua_fecha_paan != null)
+                op.ua_paa = ExistenFechasExamen(ListOportunidadesII[0], "ua_fecha_para", "ua_fecha_paav", "");
+            else if (op.ua_fecha_para != null)
+                op.ua_paa = ExistenFechasExamen(ListOportunidadesII[0], "ua_fecha_paan", "ua_fecha_paav", "");
+            else if (op.ua_fecha_paav != null)
+                op.ua_paa = ExistenFechasExamen(ListOportunidadesII[0], "ua_fecha_paan", "ua_fecha_para", "");
+
+
+
+
             // bool paa = false;
             foreach (var OportunidadId in ListOportunidadesII)
             {
@@ -1303,6 +1325,7 @@ namespace Baner.Recepcion.DataLayer
         #region Integracion 17 Preuniversitario
         public Guid CreatePreUniversitario(PreUniversitario preUniversitario)
         {
+
 
 
 
@@ -2533,6 +2556,49 @@ namespace Baner.Recepcion.DataLayer
         #endregion
 
 
+        #region 44 intetegracion nueva para algo
+
+        public bool HaYRegistrosEnCuenta()
+        {
+            bool result = false;
+            Opportunity pr = new Opportunity();
+
+            Guid idCuentaExiste = default(Guid);
+            bool bExisteOpor = false;
+            QueryExpression QueryOportEx = new QueryExpression(Opportunity.EntityLogicalName)
+            {
+
+                NoLock = false,
+                ColumnSet = new ColumnSet(new string[] { "opportunityid", "name", "ua_periodo", "ua_codigo_vpd" }),
+                //ColumnSet = new ColumnSet { AllColumns = true },
+                Criteria = {
+                    Conditions = {
+                        new ConditionExpression("ua_idbanner", ConditionOperator.Equal,  "00334254"),
+
+
+                    }
+                }
+            };
+            var Listcuent = _xrmServerConnection.RetrieveMultiple(QueryOportEx);
+            if (Listcuent != null)
+                if (Listcuent.Entities.Any())
+                {
+                    var opr = Listcuent.Entities.FirstOrDefault();
+
+                    var perido = ((EntityReference)opr.Attributes["ua_periodo"]).Name;
+                    idCuentaExiste = new Guid(opr["opportunityid"].ToString());
+                    bExisteOpor = true;
+
+                }
+
+            return result;
+        }
+        #endregion
+
+
+
+
+
         #region 50 ObtenDatosReporte
         public List<RepOportunidades> ObtenerDatosReport()
         {
@@ -2799,7 +2865,58 @@ namespace Baner.Recepcion.DataLayer
 
         }
 
+        private bool ExistenFechasExamen(Guid oportunidadID, string col1, string col2, string col3)
+        {
+            bool result = false;
 
+            ColumnSet col = null;
+            if (!string.IsNullOrEmpty(col3))
+                col = new ColumnSet(new string[] { col1, col2, col3 });
+            else if (!string.IsNullOrEmpty(col2))
+                col = new ColumnSet(new string[] { col1, col2 });
+            else if (string.IsNullOrWhiteSpace(col2))
+                col = new ColumnSet(new string[] { col1 });
+
+            Opportunity op = new Opportunity();
+
+            //if (op.ua_fecha_paan != null && op.ua_fecha_para != null && op.ua_fecha_paav != null)
+
+            QueryExpression QueryOportEx = new QueryExpression(Opportunity.EntityLogicalName)
+            {
+
+                NoLock = false,
+                ColumnSet = col,
+                //ColumnSet = new ColumnSet { AllColumns = true },
+                Criteria = {
+                    Conditions = {
+                        new ConditionExpression("opportunityid", ConditionOperator.Equal,  oportunidadID),
+
+                    }
+                }
+            };
+            var Listcuent = _xrmServerConnection.RetrieveMultiple(QueryOportEx);
+            if (Listcuent != null)
+                if (Listcuent.Entities.Any())
+                {
+                    var opr = Listcuent.Entities.FirstOrDefault();
+
+                    if (!string.IsNullOrEmpty(col3))//si biene la 3 indica que todas las columnas no bienen nullas
+                    {
+                        if (opr.Attributes.Contains(col1) && opr.Attributes.Contains(col2) && opr.Attributes.Contains(col3))
+                            result = true;
+                    }
+                    else if (!string.IsNullOrEmpty(col2))//si biene la 2 
+                    {
+                        if (opr.Attributes.Contains(col1) && opr.Attributes.Contains(col2))
+                            result = true;
+                    }
+                    else if (opr.Attributes.Contains(col1))
+                        result = true;
+
+                }
+            return result;
+
+        }
 
         private EntityReference GetVPDOfAccount(string idCuenta, out string DescVPd)
         {
@@ -4095,14 +4212,17 @@ namespace Baner.Recepcion.DataLayer
             if (ec.Entities.Any())
             {
                 var programa = ec.Entities.FirstOrDefault();
-                idp = ((EntityReference)programa.Attributes[campoReturn]).Id;
+                if (programa.Attributes.Contains(campoReturn))
+                    idp = ((EntityReference)programa.Attributes[campoReturn]).Id;
                 if (programa.Attributes.Contains(campostrinName))
                     campstrinValor = programa.Attributes[campostrinName].ToString();
 
 
 
             }
-            return new EntityReference(ua_pais_asesor.EntityLogicalName, idp);
+            if (idp != Guid.Empty)
+                return new EntityReference(ua_pais_asesor.EntityLogicalName, idp);
+            else return null;
         }
 
 

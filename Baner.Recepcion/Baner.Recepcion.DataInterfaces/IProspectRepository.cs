@@ -76,6 +76,8 @@ namespace Baner.Recepcion.DataInterfaces
 
         Guid FormulariosBecarios(Becario becario);
 
+        bool HaYRegistrosEnCuenta();
+
         List<RepOportunidades> ObtenerDatosReport();
 
     }
