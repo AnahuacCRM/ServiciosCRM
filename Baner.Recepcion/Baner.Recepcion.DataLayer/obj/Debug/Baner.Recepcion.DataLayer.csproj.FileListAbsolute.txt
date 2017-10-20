@@ -26,3 +26,17 @@ C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.D
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\obj\Debug\Baner.Recepcion.DataLayer.csprojResolveAssemblyReference.cache
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\obj\Debug\Baner.Recepcion.DataLayer.dll
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\obj\Debug\Baner.Recepcion.DataLayer.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Baner.Recepcion.DataLayer.dll.config
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Baner.Recepcion.DataLayer.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Baner.Recepcion.DataLayer.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Baner.Recepcion.BusinessTypes.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Baner.Recepcion.DataInterfaces.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Baner.Recepcion.OperationalManagement.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Banner.Recepcion.CRMTypes.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Banner.Recepcion.CRMTypes.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Baner.Recepcion.DataInterfaces.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Baner.Recepcion.BusinessTypes.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\bin\Debug\Baner.Recepcion.OperationalManagement.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\obj\Debug\Baner.Recepcion.DataLayer.csprojResolveAssemblyReference.cache
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\obj\Debug\Baner.Recepcion.DataLayer.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataLayer\obj\Debug\Baner.Recepcion.DataLayer.pdb

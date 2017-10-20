@@ -3,3 +3,7 @@ C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.B
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\obj\Debug\Baner.Recepcion.BusinessTypes.csprojResolveAssemblyReference.cache
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\obj\Debug\Baner.Recepcion.BusinessTypes.dll
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\obj\Debug\Baner.Recepcion.BusinessTypes.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\bin\Debug\Baner.Recepcion.BusinessTypes.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\bin\Debug\Baner.Recepcion.BusinessTypes.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\obj\Debug\Baner.Recepcion.BusinessTypes.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\obj\Debug\Baner.Recepcion.BusinessTypes.pdb

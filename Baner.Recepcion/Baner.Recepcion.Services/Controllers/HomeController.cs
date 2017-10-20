@@ -11,6 +11,7 @@ namespace Baner.Recepcion.Services.Controllers
         // GET: Home
         public ActionResult Index()
         {
+            ViewBag.Title = "Servicios CRM";
             return View();
         }
     }

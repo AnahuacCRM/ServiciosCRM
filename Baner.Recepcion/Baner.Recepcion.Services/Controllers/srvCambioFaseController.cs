@@ -13,6 +13,9 @@ using System.Web.Http;
 
 namespace Baner.Recepcion.Services.Controllers
 {
+    /// <summary>
+    /// Servicio 37 del CRM.
+    /// </summary>
     public class srvCambioFaseController : ApiController
     {
         private readonly ILogger _logger;

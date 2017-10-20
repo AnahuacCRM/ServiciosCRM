@@ -48,9 +48,9 @@ namespace Baner.Recepcion.BusinessTypes
         /// <summary>
         /// VPDI
         /// </summary>
-        //[Required(AllowEmptyStrings = false, ErrorMessage = "VPDI es requerido")]
-        //[MaxLength(4, ErrorMessage = "La longitud máxima de VPDI es de {1} caracteres")]
-        //public string VPDI { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "VPDI es requerido")]
+        [MaxLength(6, ErrorMessage = "La longitud máxima de VPDI es de {1} caracteres")]
+        public string VPDI { get; set; }
 
     }
 }

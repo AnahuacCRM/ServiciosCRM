@@ -14,6 +14,9 @@ using System.Web.Http;
 
 namespace Baner.Recepcion.Services.Controllers
 {
+    /// <summary>
+    /// Servicio 31 CRM.
+    /// </summary>
     public class srvAltaOportunidadController : ApiController
     {
         private readonly ILogger _logger;
@@ -23,8 +26,7 @@ namespace Baner.Recepcion.Services.Controllers
         {
             this._logger = logger;
             this._prospectProcessor = prospectProcessor;
-        }
-
+        }        
         [HttpPost]
         public HttpResponseMessage Create(Oportunidad oportunidad)
         {

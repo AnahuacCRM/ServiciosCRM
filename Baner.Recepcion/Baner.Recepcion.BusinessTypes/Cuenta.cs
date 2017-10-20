@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Baner.Recepcion.BusinessTypes
 {
+    /// <summary>
+    /// Servicio 2 CRM.
+    /// </summary>
     public class Cuenta: BusinessTypeBase
     {
         //public Guid? IdCRM { get; set; }

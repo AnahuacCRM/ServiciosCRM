@@ -9,3 +9,14 @@ C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.B
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\obj\Debug\Baner.Recepcion.BusinessInterfaces.csprojResolveAssemblyReference.cache
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\obj\Debug\Baner.Recepcion.BusinessInterfaces.dll
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\obj\Debug\Baner.Recepcion.BusinessInterfaces.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.BusinessInterfaces.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.BusinessInterfaces.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.BusinessTypes.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.DataInterfaces.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.OperationalManagement.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.DataInterfaces.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.BusinessTypes.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\bin\Debug\Baner.Recepcion.OperationalManagement.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\obj\Debug\Baner.Recepcion.BusinessInterfaces.csprojResolveAssemblyReference.cache
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\obj\Debug\Baner.Recepcion.BusinessInterfaces.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessInterfaces\obj\Debug\Baner.Recepcion.BusinessInterfaces.pdb

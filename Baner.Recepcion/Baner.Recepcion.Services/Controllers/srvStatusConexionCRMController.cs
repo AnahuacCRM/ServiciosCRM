@@ -18,7 +18,7 @@ namespace Baner.Recepcion.Services.Controllers
     {
         
 
-        [HttpPost]
+        [HttpGet]
         public HttpResponseMessage StatusCrmConexion()
         {
             try

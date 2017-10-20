@@ -69,45 +69,44 @@ namespace Baner.Recepcion.DataLayer
             string org = System.Configuration.ConfigurationManager.AppSettings["uri"];
             string user = System.Configuration.ConfigurationManager.AppSettings["username"];
             string pass = System.Configuration.ConfigurationManager.AppSettings["password"];
-
+            //Ticket 4402, cambiar contraseñas de los usuarios Consulta
             switch (vpdp.ToUpper())
             {
                 case "UAQ":
                     user = "consultauaq@anahuac.mx";
-                    pass = "C0nsult@UAQ";
+                    pass = "E;0P3@@H:";
                     break;
                 case "UAX":
                     user = "consultauax@anahuac.mx";
-                    pass = "C0nsult@UAX";
+                    pass = "KLDA9RIP#";
                     break;
                 case "UAS":
                     user = "consultauas@anahuac.mx";
-                    pass = "C0nsult@UAS";
+                    pass = "AFST>PH84";
                     break;
                 case "UAN":
                     user = "consultauan@anahuac.mx";
-                    pass = "C0nsult@UAN";
+                    pass = "@IPKMI5C;";
                     break;
                 case "UAM":
                     user = "consultauam@anahuac.mx";
-                    pass = "C0nsult@UAM";
+                    pass = "L1;LY>9GR";
                     break;
                 case "UAC":
                     user = "consultauac@anahuac.mx";
-                    pass = "C0nsult@UAC";
+                    pass = "CP=0ONG=N";
                     //user = "consultacrm3@anahuac.mx";
                     //pass = "N3wP@ss03";
                     break;
                 case "UAP":
                     user = "consultauap@anahuac.mx";
-                    pass = "C0nsult@UAP";
+                    pass = ":>D8>GB;P";
                     break;
                 case "UAO":
                     user = "consultauao@anahuac.mx";
-                    pass = "C0nsult@UAO";
+                    pass = "??8T?NECY";
                     break;
-
-
+                    
             }
 
 
@@ -393,8 +392,14 @@ namespace Baner.Recepcion.DataLayer
                     op.ua_desc_tipo_alumno = tipoAlumnoEntityRef;
                 else
                     throw new Exception(string.Format("El tipo alumno: {0} no existe en catálogo", obj.TipoAlumno));
-
-                _xrmServerConnection.Update(op);
+                try
+                {
+                    _xrmServerConnection.Update(op);
+                }
+                catch(Exception ex)
+                {
+                    string exmes = ex.Message; 
+                }
 
                 string nombreFaseAcutual = "";
                 string stage = "";
@@ -845,6 +850,7 @@ namespace Baner.Recepcion.DataLayer
             return resultado;
         }
         #endregion
+
         #region Integracion 10 Cambia Solicitud de Admision
         public bool UpdateCambiaSolicitudAdmision(CambiaSolicitudAdmision cambiaSolicitudAdmision)
         {
@@ -864,10 +870,25 @@ namespace Baner.Recepcion.DataLayer
 
                 op.ua_codigo_campus = _entityReferenceTransformer.GetCampus(cambiaSolicitudAdmision.Campus);
                 op.ua_programav2 = RetrieveProgramaByCarreraWeb(new EntityReference(ua_programaV2.EntityLogicalName, idPro), op.ua_codigo_campus, cambiaSolicitudAdmision.Campus, cambiaSolicitudAdmision.Programa);
+                var vpdiEntityRef = GetIdReferencia(BusinessUnit.EntityLogicalName, "businessunitid", "name", cambiaSolicitudAdmision.VPDI);
 
                 //op.ua_programa_asesor = GetDatoAsesor(ua_programas_por_campus_asesor.EntityLogicalName, new EntityReference(ua_programaV2.EntityLogicalName, idPro), op.ua_codigo_campus, "ua_programas_por_campus_asesorid",
                 //    "ua_programas_por_campus", "ua_codigo_vpd", "ua_programas_por_campus_asesor");
-                op.ua_programa_asesor = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPro), op.ua_codigo_campus, cambiaSolicitudAdmision.Campus, cambiaSolicitudAdmision.Programa);
+                //op.ua_programa_asesor = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPro), op.ua_codigo_campus, cambiaSolicitudAdmision.Campus, cambiaSolicitudAdmision.Programa);
+                op.ua_programa_asesor = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPro), 
+                    vpdiEntityRef,
+                    cambiaSolicitudAdmision.Campus, 
+                    cambiaSolicitudAdmision.Programa);
+                //op.ua_programa_asesor = GetDatoAsesor(ua_programas_por_campus_asesor.EntityLogicalName,
+                //       new EntityReference(ua_programaV2.EntityLogicalName, idPro),
+                //       vpdiEntityRef,
+                //       "ua_programas_por_campus_asesorid",
+                //       "ua_programas_por_campus",
+                //       "ua_codigo_vpd",
+                //       "ua_programas_por_campus_asesor",
+                //       cambiaSolicitudAdmision.Programa,
+                //       cambiaSolicitudAdmision.Campus);
+
 
                 op.ua_Programa = _entityReferenceTransformer.GetPrograma(cambiaSolicitudAdmision.Programa);
 
@@ -1178,7 +1199,7 @@ namespace Baner.Recepcion.DataLayer
                         op.ua_fecha_escei = itemResultEx.FechaResultado.GetDate();
                         break;
                     default:
-                        throw new InvalidExamCoode(string.Format("El codigo de Examen proporcionado no es valido {0}", itemResultEx.CodigoExamen));
+                        throw new InvalidExamCoode(string.Format("El código de Examen proporcionado no es valido {0}", itemResultEx.CodigoExamen));
                 }
             }
 
@@ -1436,6 +1457,8 @@ namespace Baner.Recepcion.DataLayer
         }
         #endregion
 
+
+        #region Metodos utilitarios.
         public void email_send()
         {
             MailMessage mail = new MailMessage();
@@ -1615,6 +1638,8 @@ namespace Baner.Recepcion.DataLayer
 
         }
 
+        #endregion
+
         #region Integracion 18 Solicita Beca
         public Guid CreateSolicitaBeca(SolicitaBeca solicitaBeca)
         {
@@ -1757,31 +1782,44 @@ namespace Baner.Recepcion.DataLayer
         #endregion 
 
         #region Integracion 21 Cambio SGASTDN
-        public bool UpdateCambioSGASTDN(CambioSGASTDN cambio)
+        public bool UpdateCambioSGASTDN(CambioSGASTDN cambioSGASTDN)
         {
             bool resultado = false;
             Guid idOportundad = default(Guid);
 
-            var op = GetOpenOpportunity(cambio.id_Oportunidad.ToString());
+            var op = GetOpenOpportunity(cambioSGASTDN.id_Oportunidad.ToString());
             // if (op.OpportunityId != null)
             {
-                if (!string.IsNullOrEmpty(cambio.id_Oportunidad.ToString().Trim()))
+                if (!string.IsNullOrEmpty(cambioSGASTDN.id_Oportunidad.ToString().Trim()))
                 {
-                    idOportundad = new Guid(cambio.id_Oportunidad.ToString());
+                    idOportundad = new Guid(cambioSGASTDN.id_Oportunidad.ToString());
                     // var op = new Opportunity();
                     op.OpportunityId = idOportundad;
-                    Guid idPrograma = GetProgramaId(cambio.Programa);
+                    Guid idPrograma = GetProgramaId(cambioSGASTDN.Programa);
 
-                    var campusEntityRef = _entityReferenceTransformer.GetCampus(cambio.Campus);
-                    var idProgramaCampus = RetrieveProgramaByCarreraWeb(new EntityReference(ua_programaV2.EntityLogicalName, idPrograma), campusEntityRef, cambio.Campus, cambio.Programa);
+                    var campusEntityRef = _entityReferenceTransformer.GetCampus(cambioSGASTDN.Campus);
+                    var vpdiEntityRef = GetIdReferencia(BusinessUnit.EntityLogicalName, "businessunitid", "name", cambioSGASTDN.VPDI);
+
+                    var idProgramaCampus = RetrieveProgramaByCarreraWeb(new EntityReference(ua_programaV2.EntityLogicalName, idPrograma), campusEntityRef, cambioSGASTDN.Campus, cambioSGASTDN.Programa);
                     op.ua_codigo_campus = campusEntityRef;
                     op.ua_programav2 = idProgramaCampus;
 
-                    op.ua_programa_asesor = GetDatoAsesor(ua_programas_por_campus_asesor.EntityLogicalName, new EntityReference(ua_programaV2.EntityLogicalName, idProgramaCampus.Id)
-                        , campusEntityRef, "ua_programas_por_campus_asesorid", "ua_programas_por_campus", "ua_codigo_vpd", "ua_programas_por_campus_asesor", cambio.Programa, cambio.Campus);
-                    op.ua_Programa = _entityReferenceTransformer.GetPrograma(cambio.Programa);
+                    //Ticket 4570: Se ajusta para que tome la VPD y no el campus en la búsqueda del programa por campus asesor.
+                    //op.ua_programa_asesor = GetDatoAsesor(ua_programas_por_campus_asesor.EntityLogicalName, new EntityReference(ua_programaV2.EntityLogicalName, idProgramaCampus.Id)
+                    //    , campusEntityRef, "ua_programas_por_campus_asesorid", "ua_programas_por_campus", "ua_codigo_vpd", "ua_programas_por_campus_asesor", cambioSGASTDN.Programa, cambioSGASTDN.Campus);
+                    op.ua_programa_asesor = GetDatoAsesor(ua_programas_por_campus_asesor.EntityLogicalName,
+                        new EntityReference(ua_programaV2.EntityLogicalName, idProgramaCampus.Id),
+                        vpdiEntityRef,
+                        "ua_programas_por_campus_asesorid",
+                        "ua_programas_por_campus",
+                        "ua_codigo_vpd",
+                        "ua_programas_por_campus_asesor",
+                        cambioSGASTDN.Programa,
+                        cambioSGASTDN.Campus);
+                    //Fin ticket 4570.
+                    op.ua_Programa = _entityReferenceTransformer.GetPrograma(cambioSGASTDN.Programa);
 
-                    op.ua_desc_escuela = _entityReferenceTransformer.GetEscuela(cambio.Escuela);
+                    op.ua_desc_escuela = _entityReferenceTransformer.GetEscuela(cambioSGASTDN.Escuela);
 
                     _xrmServerConnection.Update(op);
                     resultado = true;
@@ -1901,7 +1939,7 @@ namespace Baner.Recepcion.DataLayer
                 }
                 catch (Exception ex)
                 {
-                    if (!ex.ToString().Contains("No se pudo resolver el Lookup de Codigo Postal:"))
+                    if (!ex.ToString().Contains("No se pudo resolver el Lookup de código Postal:"))
                         throw new LookupException(ex.ToString());
                 }
 
@@ -2033,7 +2071,7 @@ namespace Baner.Recepcion.DataLayer
             var idVPD = GetIdReferencia(BusinessUnit.EntityLogicalName, "businessunitid", "name", pOportunidad.VPD);
 
 
-            var idProgramaCampus = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPrograma), idVPD, pOportunidad.Campus, pOportunidad.Programa);
+            //var idProgramaCampus = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPrograma), idVPD, pOportunidad.Campus, pOportunidad.Programa);
 
             Guid idp = RetrivePeriodoId(pOportunidad.Periodo);
 
@@ -2240,7 +2278,7 @@ namespace Baner.Recepcion.DataLayer
             //op.ua_periodo = _entityReferenceTransformer.GetPeriodo(obj.Periodo);
             op.OpportunityId = new Guid(obj.Id_Oportunidad);
             entityRef = GetIdReferencia(ua_estatusalumno.EntityLogicalName, "ua_estatusalumnoid", "ua_codigo_estatus_alumno", obj.Estatus);
-            op.ua_estatus_alumno = entityRef ?? throw new Exception(string.Format("Estatus: {0} no existe en catálogo.", obj.Estatus));
+            //op.ua_estatus_alumno == entityRef ?? throw new Exception(string.Format("Estatus: {0} no existe en catálogo.", obj.Estatus));
 
             //Actualizamos los campos de las oportunidades ralacionadas con esta cuenta.
             _xrmServerConnection.Update(op);
@@ -2366,7 +2404,7 @@ namespace Baner.Recepcion.DataLayer
 
         #endregion
 
-        #region 38-1(39) Obtiene todos los registros del catalgo de Estados
+        #region 38-1(39) Obtiene todos los registros del catálogo de Estados
 
         public List<Estado> GetCatalogoEstados()
         {
@@ -2454,7 +2492,7 @@ namespace Baner.Recepcion.DataLayer
             //se usa para que el campo caiga en oportunidad
             Prospecto.ua_codigo_vpd = becario.VPD;
 
-            //Obtenes el programa pro campus en bace a el codigo de carrera que se recibe
+            //Obtenes el programa pro campus en bace a el código de carrera que se recibe
             if (!string.IsNullOrWhiteSpace(becario.Codigo))
             {
 
@@ -4160,19 +4198,19 @@ namespace Baner.Recepcion.DataLayer
                 switch (EntityLogicalName)
                 {
                     case "ua_pais_asesor":
-                        msjReturn = "El codigo de Pais  " + descF1 + " con la Vpd " + descF2 + " no existe en el catalgo";
+                        msjReturn = "El código de Pais  " + descF1 + " con la Vpd " + descF2 + " no existe en el catálogo";
                         break;
                     case "ua_estados_asesor":
-                        msjReturn = "El codigo de estado  " + descF1 + " con la Vpd " + descF2 + " no existe en el catalgo";
+                        msjReturn = "El código de estado  " + descF1 + " con la Vpd " + descF2 + " no existe en el catálogo";
                         break;
                     case "ua_delegacion_municipio_asesor":
-                        msjReturn = "El codigo de Municipio  " + descF1 + " con la  Vpd " + descF2 + " no existe en el catalgo";
+                        msjReturn = "El código de Municipio  " + descF1 + " con la  Vpd " + descF2 + " no existe en el catálogo";
                         break;
                     case "ua_programas_por_campus_asesor":
-                        msjReturn = "El codigo de programa  " + descF1 + " con la vpd " + descF2 + " no existe en el catalgo";
+                        msjReturn = "El código de programa  " + descF1 + " con la vpd " + descF2 + " no existe en el catálogo";
                         break;
                     case "ua_colegios_asesor":
-                        msjReturn = "El codigo colegio   " + descF1 + " con la vpd " + descF2 + " no existe en el catalgo";
+                        msjReturn = "El código colegio   " + descF1 + " con la vpd " + descF2 + " no existe en el catálogo";
                         break;
 
                     default:
@@ -4565,7 +4603,7 @@ namespace Baner.Recepcion.DataLayer
             }
             return resultado;
         }
-        //obtiene el progama en bace  al codigo de carrera
+        //obtiene el progama en bace  al código de carrera
         private EntityReference RetrivePrograma(string sCodigoPograma)
         {
 
@@ -4709,7 +4747,7 @@ namespace Baner.Recepcion.DataLayer
                     Progr = new EntityReference(ua_ppc_programav2.EntityLogicalName, idProgramaPorCampus);
                 }
                 if (idProgramaPorCampus == default(Guid))
-                    throw new LookupException("El id campus  " + Campus.Id + " y el id programa " + idProgrma + " no existe en el catalgo");
+                    throw new LookupException("El id campus  " + Campus.Id + " y el id programa " + idProgrma + " no existe en el catálogo");
             }
             //else
             //    throw new LookupException("el  Programa " + pcodigoPrograma + " no fue encontro en el catalogo");
@@ -5025,7 +5063,7 @@ namespace Baner.Recepcion.DataLayer
 
             }
             if (idp == default(Guid))
-                throw new LookupException("El id campus  " + pCampus + " y el id programa " + pPrograma + " no existe en el catalgo");
+                throw new LookupException("El id campus  " + pCampus + " y el id programa " + pPrograma + " no existe en el catálogo");
             return new EntityReference(ua_ppc_programav2.EntityLogicalName, idp);
 
         }
@@ -5072,7 +5110,7 @@ namespace Baner.Recepcion.DataLayer
 
             }
             if (idp == default(Guid))
-                throw new LookupException("La  Campus  " + pCampus + " y el id programa " + pPrograma + " no existe en el catalgo");
+                throw new LookupException("El campus " + pCampus + " y el id programa " + pPrograma + " no existe en el catálogo");
             return new EntityReference(ua_ppc_programav2.EntityLogicalName, idp);
 
         }
@@ -5095,25 +5133,38 @@ namespace Baner.Recepcion.DataLayer
             QueryExpression Query = new QueryExpression(ua_programas_por_campus_asesor.EntityLogicalName)
             {
                 NoLock = true,
-                ColumnSet = new ColumnSet(new string[] { "ua_programas_por_campus_asesorid", "ua_codigo_del_programa" }),
+                ColumnSet = new ColumnSet(new string[] { "ua_programas_por_campus_asesorid", "ua_codigo_del_programa", "ua_programa_campus_asesor_desc" }),
                 Criteria = {
                         Conditions = {
 
                             new ConditionExpression("ua_codigo_vpd", ConditionOperator.Equal, vpd.Id),
                             new ConditionExpression("ua_programaporcampusasesorid", ConditionOperator.Equal, Programa.Id)
 
+
                         }
                     }
             };
             var ec = _xrmServerConnection.RetrieveMultiple(Query);
-            if (ec.Entities.Any())
-            {
-                var programa = ec.Entities.FirstOrDefault();
-                idp = new Guid(programa.Attributes["ua_programas_por_campus_asesorid"].ToString());
 
+            foreach (var entity in ec.Entities)
+            {
+                if (entity.Attributes["ua_programa_campus_asesor_desc"].ToString().Contains(pCampus))
+                {
+                    var programa = entity;
+                    idp = new Guid(programa.Attributes["ua_programas_por_campus_asesorid"].ToString());
+                    break;
+                }
             }
+
+            //if (ec.Entities.Any())
+            //{
+            //    var programa = ec.Entities.FirstOrDefault();
+            //    idp = new Guid(programa.Attributes["ua_programas_por_campus_asesorid"].ToString());
+
+            //}
             if (idp == default(Guid))
-                throw new LookupException("La  Campus  " + pCampus + " y el id programa " + pPrograma + " no existe en el catalgo");
+                //throw new LookupException("El campus " + pCampus + " y el id programa " + pPrograma + " no existe en el catálogo");
+                throw new LookupException("No existe una combinación para el programa " + pPrograma + ", campus " + pCampus + " y la VPDI " + vpd.Name + " dentro del catálogo Programa por Campus Asesor.");
             return new EntityReference(ua_programas_por_campus_asesor.EntityLogicalName, idp);
 
         }

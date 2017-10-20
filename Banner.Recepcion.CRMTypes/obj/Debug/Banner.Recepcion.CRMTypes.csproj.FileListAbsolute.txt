@@ -5,3 +5,8 @@ C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\bin\Deb
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\obj\Debug\Banner.Recepcion.CRMTypes.csprojResolveAssemblyReference.cache
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\obj\Debug\Banner.Recepcion.CRMTypes.dll
 C:\AnahuacGitHub\integracionesCRM\ServiciosCRM\Banner.Recepcion.CRMTypes\obj\Debug\Banner.Recepcion.CRMTypes.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Banner.Recepcion.CRMTypes\bin\Debug\Banner.Recepcion.CRMTypes.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Banner.Recepcion.CRMTypes\bin\Debug\Banner.Recepcion.CRMTypes.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Banner.Recepcion.CRMTypes\obj\Debug\Banner.Recepcion.CRMTypes.csprojResolveAssemblyReference.cache
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Banner.Recepcion.CRMTypes\obj\Debug\Banner.Recepcion.CRMTypes.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Banner.Recepcion.CRMTypes\obj\Debug\Banner.Recepcion.CRMTypes.pdb
