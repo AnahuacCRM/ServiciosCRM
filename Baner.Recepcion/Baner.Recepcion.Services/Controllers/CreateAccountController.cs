@@ -14,6 +14,9 @@ using System.Web.Http;
 
 namespace Baner.Recepcion.Services.Controllers
 {
+    /// <summary>
+    /// Servicio 2 CRM.
+    /// </summary>
     [Authorize]
     //Controlador para crear una cuenta nueva
 

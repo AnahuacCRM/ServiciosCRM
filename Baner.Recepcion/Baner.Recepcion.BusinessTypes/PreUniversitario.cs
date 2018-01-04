@@ -71,5 +71,7 @@ namespace Baner.Recepcion.BusinessTypes
         [Required(ErrorMessage = "El atributo {0} es requerido.")]
         [MaxLength(3, ErrorMessage = "La longitud maxima del atributo {0} es de {1} caracteres.")]
         public string VPD { get; set; }
+
+        public string Periodo { get; set; }
     }
 }

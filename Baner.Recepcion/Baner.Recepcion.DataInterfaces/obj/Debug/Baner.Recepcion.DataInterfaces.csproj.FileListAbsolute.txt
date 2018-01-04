@@ -12,3 +12,9 @@ E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\obj\Debug\Baner.Recepcion.DataInterfaces.csprojResolveAssemblyReference.cache
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\obj\Debug\Baner.Recepcion.DataInterfaces.dll
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\obj\Debug\Baner.Recepcion.DataInterfaces.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\bin\Debug\Microsoft.Crm.Sdk.Proxy.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\bin\Debug\Microsoft.Xrm.Sdk.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\bin\Debug\Microsoft.Xrm.Sdk.Workflow.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\bin\Debug\Microsoft.Crm.Sdk.Proxy.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\bin\Debug\Microsoft.Xrm.Sdk.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\bin\Debug\Microsoft.Xrm.Sdk.Workflow.xml

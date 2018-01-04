@@ -1,0 +1,4 @@
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\bin\Desarrollo\Baner.Recepcion.DataInterfaces.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\bin\Desarrollo\Baner.Recepcion.BusinessTypes.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\obj\Desarrollo\Baner.Recepcion.DataInterfaces.csprojResolveAssemblyReference.cache
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.DataInterfaces\obj\Desarrollo\Baner.Recepcion.DataInterfaces.dll

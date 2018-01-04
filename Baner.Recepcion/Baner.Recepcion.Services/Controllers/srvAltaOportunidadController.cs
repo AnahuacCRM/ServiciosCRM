@@ -26,7 +26,10 @@ namespace Baner.Recepcion.Services.Controllers
         {
             this._logger = logger;
             this._prospectProcessor = prospectProcessor;
-        }        
+        }
+        /// <summary>
+        /// Servicio 31 CRM.
+        /// </summary>
         [HttpPost]
         public HttpResponseMessage Create(Oportunidad oportunidad)
         {

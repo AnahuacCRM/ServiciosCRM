@@ -13,6 +13,9 @@ using System.Web.Http;
 
 namespace Baner.Recepcion.Services.Controllers
 {
+    /// <summary>
+    /// Servicio 19 CRM.
+    /// </summary>
     [Authorize]
     public class srvAltaOtorgaBecaController : ApiController
     {

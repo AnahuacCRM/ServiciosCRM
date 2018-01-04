@@ -13,7 +13,9 @@ using System.Web.Http;
 
 namespace Baner.Recepcion.Services.Controllers
 {
-
+    /// <summary>
+    /// Servicio ??? CRM.
+    /// </summary>
     [Authorize]
     public class srvCambioCuentaPersonaController : ApiController
     {

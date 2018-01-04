@@ -13,6 +13,9 @@ using System.Web.Http;
 
 namespace Baner.Recepcion.Services.Controllers
 {
+    /// <summary>
+    /// Servicio Formulario Becario.
+    /// </summary>
     public class srvAltaPreUniversitarioBecarioController : ApiController
     {
         private readonly ILogger _logger;

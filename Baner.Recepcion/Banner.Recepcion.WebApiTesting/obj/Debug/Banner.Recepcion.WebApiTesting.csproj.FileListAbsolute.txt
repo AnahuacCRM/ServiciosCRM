@@ -159,3 +159,7 @@ E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Banner.Recepcion
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Banner.Recepcion.WebApiTesting\obj\Debug\Banner.Recepcion.WebApiTesting.dll
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Banner.Recepcion.WebApiTesting\obj\Debug\Banner.Recepcion.WebApiTesting.pdb
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Banner.Recepcion.WebApiTesting\bin\Debug\Baner.Recepcion.Services.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Banner.Recepcion.WebApiTesting\bin\Debug\Microsoft.Xrm.Sdk.Workflow.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Banner.Recepcion.WebApiTesting\bin\Debug\Microsoft.Crm.Sdk.Proxy.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Banner.Recepcion.WebApiTesting\bin\Debug\Microsoft.Xrm.Sdk.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Banner.Recepcion.WebApiTesting\bin\Debug\Microsoft.Xrm.Sdk.Workflow.xml

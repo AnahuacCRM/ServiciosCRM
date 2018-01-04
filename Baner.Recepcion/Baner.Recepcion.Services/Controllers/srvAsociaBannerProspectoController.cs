@@ -12,6 +12,9 @@ using System.Web.Http;
 
 namespace Baner.Recepcion.Services.Controllers
 {
+    /// <summary>
+    /// Servicio ??? CRM.
+    /// </summary>
     public class srvAsociaBannerProspectoController : ApiController
     {
         private readonly ILogger _logger;

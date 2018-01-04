@@ -149,3 +149,9 @@ E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.Services\obj\Debug\Baner.Recepcion.Services.dll
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.Services\obj\Debug\Baner.Recepcion.Services.pdb
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.Services\bin\Baner.Recepcion.Services.XML
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.Services\bin\Microsoft.Crm.Sdk.Proxy.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.Services\bin\Microsoft.Xrm.Sdk.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.Services\bin\Microsoft.Xrm.Sdk.Workflow.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.Services\bin\Microsoft.Crm.Sdk.Proxy.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.Services\bin\Microsoft.Xrm.Sdk.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.Services\bin\Microsoft.Xrm.Sdk.Workflow.xml

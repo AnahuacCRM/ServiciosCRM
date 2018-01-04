@@ -12,6 +12,10 @@ using System.Web.Http;
 
 namespace Baner.Recepcion.Services.Controllers
 {
+    /// <summary>
+    /// Servicio ??? CRM.
+    /// </summary>
+           
     public class AltaProspectoBannerController : ApiController
     {
         private readonly ILogger _logger;
@@ -22,6 +26,7 @@ namespace Baner.Recepcion.Services.Controllers
             _logger = logger;
             _bannerProcessor = bannerProcessor;
         }
+
         [HttpPost]
         public HttpResponseMessage AltaProespectoBanner(CrearCuentaBanner Prospecto)
         {

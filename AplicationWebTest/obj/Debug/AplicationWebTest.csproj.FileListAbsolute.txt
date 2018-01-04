@@ -188,3 +188,7 @@ E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\AplicationWebTest\bin\Banner.Rec
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\AplicationWebTest\bin\es\Microsoft.Web.Infrastructure.resources.dll
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\AplicationWebTest\bin\es\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
 E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\AplicationWebTest\bin\Baner.Recepcion.Services.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\AplicationWebTest\bin\Microsoft.Xrm.Sdk.Workflow.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\AplicationWebTest\bin\Microsoft.Crm.Sdk.Proxy.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\AplicationWebTest\bin\Microsoft.Xrm.Sdk.xml
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\AplicationWebTest\bin\Microsoft.Xrm.Sdk.Workflow.xml

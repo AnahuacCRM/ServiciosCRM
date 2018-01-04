@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+    <title>Consulta de Coincidencias</title>   
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/angular-block-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/loading-bar.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/angular.min.js"></script>   
+    <script src="~/Scripts/angular-sanitize.min.js"></script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script src="~/Scripts/angular-route.min.js"></script>
+    <script src="~/Scripts/angular-animate.min.js"></script>
+    <script src="~/Scripts/loading-bar.min.js"></script>
+    <script src="~/Scripts/angular-block-ui.min.js"></script>
+    <script  src="~/Scripts/ConsultaHelper.js?1.0.1"></script>
+</head>
+<body ng-app="MyApp">
+    <div ng-controller="PostsCtrl" class="container">
+        <h3>Posibles Duplicados</h3>
+        <h4>{{Data.Nombre}} {{Data.Segundo_Nombre}} {{Data.Apellido_Paterno}} {{Data.Apellido_Materno}}</h4>
+        <div class="table-responsive">
+            <table class="table table-hover table-condensed  table-striped">
+                <thead>
+                    <tr>
+                        <th>IdBanner</th><th>Nombre</th><th>Sexo</th><th>Dirección</th><th>Teléfono</th><th>Correo</th><th>Fecha de Nacimiento</th><th>ContieneHA</th><th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cust in customers">
+                        <td>{{ cust.IdBanner }}</td>
+                        <td>{{ cust.Nombre }}</td>
+                        <td>{{ cust.Sexo}}</td>
+                        <td>{{ cust.Direccion}}</td>
+                        <td>{{ cust.Telefono}}</td>
+                        <td>{{ cust.Correo}}</td>
+                        <td>{{ cust.fecha | date:'yyyy-MM-dd'}}</td>
+                        <td>{{ cust.ContieneHA}}</td>
+                        <td ng-model="cust">
+                            <button type="button" ng-model="cust" ng-click="choseItem(cust)"
+                                    class="btn btn-sm btn-success" ng-show="ValidateToShow(cust)">
+                                Asociar id
+                            </button>
+                            <div class="alert alert-danger" role="alert" ng-show="ShowAlert(cust)">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span class="sr-only">Error:</span>
+                                Existe registro en CRM
+                            </div>
+                            <div class="alert alert-danger" role="alert" ng-show="ShowContieneHA(cust)">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span class="sr-only">Error:</span>
+                                Contiene HA
+                            </div>
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="alert alert-danger" role="alert" ng-model="ErrorMesage" ng-show="ErrorMesage.length>0">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ErrorMesage}}
+        </div>
+        <br /><br />
+        <button type="button" class="btn btn-default" ng-click="Cierra()">Crear nuevo id</button>
+       
+        @*<button type="button" class="btn btn-warning" ng-click="NuevoRegistro()" ng-disabled="isDisabled" >Nuevo</button>*@
+        <br /><br />
+    </div>
+</body>
+</html>

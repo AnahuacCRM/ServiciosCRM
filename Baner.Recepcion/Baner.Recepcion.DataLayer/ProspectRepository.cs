@@ -1,15 +1,8 @@
-﻿using AutoMapper;
-using Baner.Recepcion.BusinessTypes;
+﻿using Baner.Recepcion.BusinessTypes;
 using Baner.Recepcion.BusinessTypes.Extensions;
 using Baner.Recepcion.BusinessTypes.RespuestasServicio;
 using Baner.Recepcion.DataInterfaces;
 using Baner.Recepcion.DataLayer.CRM;
-using Baner.Recepcion.DataLayer.Resolvers;
-using Baner.Recepcion.DataLayer.Resolvers.CorreoResolver;
-using Baner.Recepcion.DataLayer.Resolvers.DireccionResolver;
-using Baner.Recepcion.DataLayer.Resolvers.NewProspectResolvers;
-using Baner.Recepcion.DataLayer.Resolvers.TelefonoResolver;
-using Baner.Recepcion.DataLayer.Resolvers.TutorResolvers;
 using Baner.Recepcion.DataLayer.Transformators;
 using Baner.Recepcion.OperationalManagement.Exceptions;
 using Microsoft.Crm.Sdk.Messages;
@@ -21,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Net.Mail;
 using System.ServiceModel;
 
@@ -40,6 +32,8 @@ namespace Baner.Recepcion.DataLayer
         private readonly EntityReferenceTransformer _entityReferenceTransformer;
         private readonly PickListTransformer _pickListTransformer;
         private readonly IOpportunityRepository _OpportunityRepository;
+
+        public string vsVersionAvanceFase = System.Configuration.ConfigurationManager.AppSettings["csVersionAvanceFase"];
 
 
         public CRM365.Conector.Service service { get; set; }
@@ -106,7 +100,7 @@ namespace Baner.Recepcion.DataLayer
                     user = "consultauao@anahuac.mx";
                     pass = "??8T?NECY";
                     break;
-                    
+
             }
 
 
@@ -179,7 +173,7 @@ namespace Baner.Recepcion.DataLayer
             }
             else
             {
-                respuestaIntegracion.Warnings.Add("La clave " + prospect.Colegio_Procedencia + " del colegio de procedencia no se enconrto en catalogo");
+                respuestaIntegracion.Warnings.Add("WARNING PREPA: La clave " + prospect.Colegio_Procedencia + " del colegio de procedencia no se encontró en catálogo.");
                 prospect.Colegio_Procedencia = "";
             }
             #endregion
@@ -238,8 +232,11 @@ namespace Baner.Recepcion.DataLayer
 
                         RegistrosCreados.Add(idOportunidadRegresar, Opportunity.EntityLogicalName);
                         ////Actualizamos la etapa a Solicitante
-                        ActualizarFaseCono("Solicitante", "Opportunity Sales Process", idOportunidadRegresar);
-
+                        if (vsVersionAvanceFase == "1")
+                            ActualizarFaseCono("Solicitante", "Opportunity Sales Process", idOportunidadRegresar);
+                        //Fase2
+                        else if (vsVersionAvanceFase == "2")
+                            ActualizarFaseCono2(idOportunidadRegresar, OrigenOportundiad(idOportunidadRegresar));
 
 
 
@@ -278,8 +275,11 @@ namespace Baner.Recepcion.DataLayer
                     //}
                     RegistrosCreados.Add(idOportunidadRegresar, Opportunity.EntityLogicalName);
                     ////Actualizamos la etapa a Solicitante
-                    ActualizarFaseCono("Solicitante", "Opportunity Sales Process", idOportunidadRegresar);
-
+                    if (vsVersionAvanceFase == "1")
+                        ActualizarFaseCono("Solicitante", "Opportunity Sales Process", idOportunidadRegresar);
+                    //Fase2
+                    else if (vsVersionAvanceFase == "2")
+                        ActualizarFaseCono2(idOportunidadRegresar, OrigenOportundiad(idOportunidadRegresar));
 
 
 
@@ -373,69 +373,37 @@ namespace Baner.Recepcion.DataLayer
         {
             var ret = false;
             var obj = examinado;
-
             var op = GetOpenOpportunity(obj.id_Oportunidad);
-            //if (op.OpportunityId != null)
+            Guid idc = IdCuentaByOportunid(new Guid(obj.id_Oportunidad));
+            op.ua_codigo_campus = _entityReferenceTransformer.GetCampus(obj.Campus);
+            Guid idprogrmaa = GetProgramaId(obj.Programa);
+            op.ua_sobresaliente = obj.PuntualizacionSobresaliente.StringToBoolTransfom();
+            op.ua_promedio = obj.PromedioPreparatoria;
+            var tipoAlumnoEntityRef = GetIdReferencia(ua_tipoalumno.EntityLogicalName, "ua_tipoalumnoid", "ua_codigo_tipo_alumno", obj.TipoAlumno);
+            if (tipoAlumnoEntityRef != null)
+                op.ua_desc_tipo_alumno = tipoAlumnoEntityRef;
+            else
+                throw new Exception(string.Format("El tipo alumno: {0} no existe en catálogo", obj.TipoAlumno));
+            try { _xrmServerConnection.Update(op); }
+            catch (Exception ex) { string exmes = ex.Message; }
+            #region Cambio de Fase a Examinado            
+            try
             {
-                Guid idc = IdCuentaByOportunid(new Guid(obj.id_Oportunidad));
-                //var op = new Opportunity();
-                //op.OpportunityId = new Guid(examinado.id_Oportunidad);
-                op.ua_codigo_campus = _entityReferenceTransformer.GetCampus(obj.Campus);
-                Guid idprogrmaa = GetProgramaId(obj.Programa);
-
-
-                op.ua_sobresaliente = obj.PuntualizacionSobresaliente.StringToBoolTransfom();
-                op.ua_promedio = obj.PromedioPreparatoria;
-                //Validar tipo alumno
-                var tipoAlumnoEntityRef = GetIdReferencia(ua_tipoalumno.EntityLogicalName, "ua_tipoalumnoid", "ua_codigo_tipo_alumno", obj.TipoAlumno);
-                if (tipoAlumnoEntityRef != null)
-                    op.ua_desc_tipo_alumno = tipoAlumnoEntityRef;
-                else
-                    throw new Exception(string.Format("El tipo alumno: {0} no existe en catálogo", obj.TipoAlumno));
-                try
+                if (vsVersionAvanceFase == "1")
                 {
-                    _xrmServerConnection.Update(op);
+                    string origen = OrigenOportundiad((Guid)op.OpportunityId);
+                    if (origen != "3" && origen != "4")
+                        ActualizarFaseCono("Examinado", "Proceso de cliente potencial a ventas de la oportunidad", (Guid)op.OpportunityId);
+                    else
+                        ActualizarFaseCono("Examinado", "Opportunity Sales Process", (Guid)op.OpportunityId);
                 }
-                catch(Exception ex)
-                {
-                    string exmes = ex.Message; 
-                }
-
-                string nombreFaseAcutual = "";
-                string stage = "";
-                string proceso = "";
-                var bpm = new BusinessProcessManager();
-                //Si cumple la condicion actualizamos la fase de solicitante
-                // if (SetStageSolicitanteIdOpotunidad(op.OpportunityId.ToString(), out nombreFaseAcutual))
-
-
-
-
-                //Falta actualizar la fase a examinado
-                #region Cambio de Fase a Examinado
-
-
-                //string stage = _entityReferenceTransformer.GetEtapaProceso("rs_variablesistema", "Etapa 2");//Prov
-                //string proceso = _entityReferenceTransformer.GetEtapaProceso("rs_variablesistema", "ProcessName Oportunidad");
-                stage = "Examinado";
-                proceso = "Proceso de cliente potencial a ventas de la oportunidad";
-                // proceso = "Opportunity Sales Process";
-                //bpm.UpdateStage(proceso, stage, Opportunity.EntityLogicalName, idOportunidadRegresar);
-                try
-                {
-                    bpm.UpdateStage(proceso, stage, Opportunity.EntityLogicalName, (Guid)op.OpportunityId);
-                    //bpm.UpdateStage(proceso, stage, Opportunity.EntityLogicalName, new Guid(obj.id_Oportunidad));
-                }
-                catch (Exception ex)
-                {
-                    throw new CRMException(String.Format("ha ocurrido un error al actualizar el stage: a examinado {0}", ex.ToString()));
-                }
-                #endregion
-
-                //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
-                ActualizarFaseCono("Examinado", "Opportunity Sales Process", (Guid)op.OpportunityId);
-                ret = true;
+                //Fase2
+                else if (vsVersionAvanceFase == "2")
+                    ActualizarFaseCono2((Guid)op.OpportunityId, OrigenOportundiad((Guid)op.OpportunityId));
             }
+            catch (Exception ex) { throw new CRMException(String.Format("Ha ocurrido un error al actualizar el stage a Examinado {0}", ex.ToString())); }
+            #endregion
+            ret = true;
             return ret;
         }
         #endregion
@@ -446,153 +414,53 @@ namespace Baner.Recepcion.DataLayer
             var ret = false;
             var obj = admitido;
             var op = new Opportunity();
-            //var op = GetOpenOpportunity(obj.id_oportunidad);
-            //if (op.OpportunityId != null)
+            Guid idOportunidad = new Guid(admitido.id_oportunidad);
+            op.OpportunityId = idOportunidad;
+            Guid idPrograma = GetProgramaId(obj.Programa);
+            var campusEntityRef = GetIdReferencia(BusinessUnit.EntityLogicalName, "businessunitid", "name", obj.Campus);
+            if (campusEntityRef != null)
+                op.ua_codigo_campus = campusEntityRef;
+            else
+                throw new Exception(string.Format("El Campus: {0} no existe.", obj.Campus));
+            var tipoDecisionEntityRef = GetIdReferencia(ua_tipo_decision.EntityLogicalName, "ua_tipo_decisionid", "ua_codigo_tipo_decision", obj.DesicionAdmision);
+            if (tipoDecisionEntityRef != null)
+                op.ua_desc_tipo_desicion = tipoDecisionEntityRef;
+            else
+                throw new Exception(string.Format("El campo Tipo Decision: {0} no existe.", obj.DesicionAdmision));
+
+            var idProgramaCampus = RetrieveProgramaByCarreraWeb(new EntityReference(ua_programaV2.EntityLogicalName, idPrograma), op.ua_codigo_campus, obj.Campus, obj.Programa);
+            op.ua_programav2 = idProgramaCampus;
+            op.ua_programa_asesor = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPrograma), campusEntityRef, obj.Campus, obj.Programa);
+            op.ua_Programa = _entityReferenceTransformer.GetPrograma(obj.Programa);
+            op.ua_desc_escuela = _entityReferenceTransformer.GetEscuela(obj.Escuela);
+            var tipoAdmisionEntityRef = GetIdReferencia(ua_tipo_admision.EntityLogicalName, "ua_tipo_admisionid", "ua_codigo_tipo_admision", obj.TipoAdmision);
+            if (tipoAdmisionEntityRef != null)
+                op.ua_desc_tipo_admision = tipoAdmisionEntityRef;
+            else
+                throw new Exception(string.Format("El campo Tipo Admision: {0} no existe.", obj.TipoAdmision));
+            var oppcurrentstatus = _OpportunityRepository.RetrieveStatusById(idOportunidad);
+
+            if (string.IsNullOrWhiteSpace(obj.StatusOpo))
             {
-                Guid idOportunidad = new Guid(admitido.id_oportunidad);
-                // var idOportunidad = (Guid)op.OpportunityId;
-                op.OpportunityId = idOportunidad;
-                //--<Campus
-                Guid idPrograma = GetProgramaId(obj.Programa);
-
-                var campusEntityRef = GetIdReferencia(BusinessUnit.EntityLogicalName, "businessunitid", "name", obj.Campus);
-                if (campusEntityRef != null)
-                    op.ua_codigo_campus = campusEntityRef;
-                else
-                    throw new Exception(string.Format("El Campus: {0} no existe.", obj.Campus));
-                //-->
-
-                //--<Tipo Decision
-                var tipoDecisionEntityRef = GetIdReferencia(ua_tipo_decision.EntityLogicalName, "ua_tipo_decisionid", "ua_codigo_tipo_decision", obj.DesicionAdmision);
-                if (tipoDecisionEntityRef != null)
-                    op.ua_desc_tipo_desicion = tipoDecisionEntityRef;
-                else
-                    throw new Exception(string.Format("El campo Tipo Decision: {0} no existe.", obj.DesicionAdmision));
-                //-->
-
-                var idProgramaCampus = RetrieveProgramaByCarreraWeb(new EntityReference(ua_programaV2.EntityLogicalName, idPrograma), op.ua_codigo_campus, obj.Campus, obj.Programa);
-
-                op.ua_programav2 = idProgramaCampus;
-
-                op.ua_programa_asesor = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPrograma), campusEntityRef, obj.Campus, obj.Programa);
-
-                op.ua_Programa = _entityReferenceTransformer.GetPrograma(obj.Programa);
-
-
-                op.ua_desc_escuela = _entityReferenceTransformer.GetEscuela(obj.Escuela);
-
-                //--<Tipo Admision
-                var tipoAdmisionEntityRef = GetIdReferencia(ua_tipo_admision.EntityLogicalName, "ua_tipo_admisionid", "ua_codigo_tipo_admision", obj.TipoAdmision);
-                if (tipoAdmisionEntityRef != null)
-                    op.ua_desc_tipo_admision = tipoAdmisionEntityRef;
-                else
-                    throw new Exception(string.Format("El campo Tipo Admision: {0} no existe.", obj.TipoAdmision));
-                //-->
-
-                //op.ua_sobresaliente = obj.PuntualizacionSobresaliente.StringToBoolTransfom();
-
-                var oppcurrentstatus = _OpportunityRepository.RetrieveStatusById(idOportunidad);
-
-                //¿Se evaluarán estos dos casos (4 y 3)?
-                if (string.IsNullOrWhiteSpace(obj.StatusOpo))
+                if (oppcurrentstatus == 4) //Cerrada
                 {
-                    //¿Se evaluarán estos dos casos (4 y 3)?
-                    if (oppcurrentstatus == 4) //Cerrada
-                    {
-                        _OpportunityRepository.ReopenOpportunity(Opportunity.EntityLogicalName, idOportunidad);
-                    }
+                    _OpportunityRepository.ReopenOpportunity(Opportunity.EntityLogicalName, idOportunidad);
                 }
-                //Si la oportunidad ya fue ganada no debe permitir ningun cambio
-                else if (oppcurrentstatus == 3) //Ganada
-                {
-                    throw new CRMException("La oportunidad ya fue ganada");
-                }
-
-                _xrmServerConnection.Update(op);
-
-
-                string SubOrigenOp = SubOrigenOportundiad(idOportunidad);
-                if (SubOrigenOp == "Oportunidad")
-                    //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
-                    ActualizarFaseCono("Admitido", "Opportunity Sales Process", idOportunidad);
-                else
-                    //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
-                    ActualizarFaseCono("Admitido", "Proceso de cliente potencial a ventas de la oportunidad", idOportunidad);
-
-                #region avanzar de fase cuando se califica el prospecto o nace por el dos
-
-
-
-
-                #endregion
-
-
-
-                #region Cerrar la oportunidad que le llego
-                if (string.IsNullOrWhiteSpace(obj.StatusOpo))
-                {
-                    try
-                    {
-                        Guid idCuenta = IdCuentaByOportunid(idOportunidad);
-                        //_OpportunityRepository.DeactivateOportunity(Opportunity.EntityLogicalName, idOportunidad);
-                        var ops = _OpportunityRepository.RetrieveOportunidades(idCuenta, idOportunidad);
-                        if (ops != null && ops.Any())
-                        {
-                            //cerrando oportunidades
-                            foreach (var opportunityToClose in ops)
-                            {
-                                _OpportunityRepository.DeactivateOportunity(Opportunity.EntityLogicalName, opportunityToClose);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new CRMException(String.Format("Ha ocurrido un error al inactivar las oportunidades del solicitante: {0}", ex.ToString()));
-                    }
-
-                }
-                // else if (obj.StatusOpo!=null && obj.StatusOpo.ToUpper()=="C") //  entraria aqui cuando es transferencia
-
-
-                #endregion
-                ret = true;
             }
-            return ret;
-        }
-        #endregion
-
-        #region Integracion 5 Rechazado
-        public bool UpdateRechazado(Rechazado rechazado)
-        {
-            //var op = new Opportunity();
-            var ret = false;
-            // var obj = rechazado;
-            var op = GetOpenOpportunity(rechazado.id_Oportunidad);
-            Guid idCuenta = new Guid(rechazado.id_Cuenta);
-            // if (op.OpportunityId != null)
+            //Si la oportunidad ya fue ganada no debe permitir ningun cambio
+            else if (oppcurrentstatus == 3) //Ganada
             {
-                if (!string.IsNullOrEmpty(rechazado.id_Oportunidad.Trim()))
-                    op.OpportunityId = new Guid(rechazado.id_Oportunidad);
-                else
-                    throw new Exception("El campo id oportunidad no puede ir vacio");
-
-                var tipoDecisionEntityRef = GetIdReferencia(ua_tipo_decision.EntityLogicalName, "ua_tipo_decisionid", "ua_codigo_tipo_decision", rechazado.DecisionAdmision);
-                if (tipoDecisionEntityRef != null)
-                    op.ua_desc_tipo_desicion = tipoDecisionEntityRef;
-                else
-                    throw new Exception(string.Format("El campo Decision Admision: {0} no existe", rechazado.DecisionAdmision));
-
-                _xrmServerConnection.Update(op);
-                //cerramos la oportunidad recibida
-                _OpportunityRepository.DeactivateOportunity(Opportunity.EntityLogicalName, (Guid)op.OpportunityId);
-
-
-                #region Cerrar la oportunidad que le llego
+                throw new CRMException("La oportunidad ya fue ganada");
+            }
+            _xrmServerConnection.Update(op);
+            #region Cerrar la oportunidad que le llego
+            if (string.IsNullOrWhiteSpace(obj.StatusOpo))
+            {
                 try
                 {
-
+                    Guid idCuenta = IdCuentaByOportunid(idOportunidad);
                     //_OpportunityRepository.DeactivateOportunity(Opportunity.EntityLogicalName, idOportunidad);
-                    var ops = _OpportunityRepository.RetrieveOportunidades(idCuenta, (Guid)op.OpportunityId);
+                    var ops = _OpportunityRepository.RetrieveOportunidades(idCuenta, idOportunidad);
                     if (ops != null && ops.Any())
                     {
                         //cerrando oportunidades
@@ -607,11 +475,54 @@ namespace Baner.Recepcion.DataLayer
                     throw new CRMException(String.Format("Ha ocurrido un error al inactivar las oportunidades del solicitante: {0}", ex.ToString()));
                 }
 
-                #endregion
-
-
-                return true;
             }
+            #endregion
+            ret = true;
+            return ret;
+        }
+
+
+        #endregion
+
+        #region Integracion 5 Rechazado
+        public bool UpdateRechazado(Rechazado rechazado)
+        {
+            var ret = false;
+            var op = GetOpenOpportunity(rechazado.id_Oportunidad);
+            Guid idCuenta = new Guid(rechazado.id_Cuenta);
+            if (!string.IsNullOrEmpty(rechazado.id_Oportunidad.Trim()))
+                op.OpportunityId = new Guid(rechazado.id_Oportunidad);
+            else
+                throw new Exception("El campo id oportunidad no puede ir vacio");
+
+            var tipoDecisionEntityRef = GetIdReferencia(ua_tipo_decision.EntityLogicalName, "ua_tipo_decisionid", "ua_codigo_tipo_decision", rechazado.DecisionAdmision);
+            if (tipoDecisionEntityRef != null)
+                op.ua_desc_tipo_desicion = tipoDecisionEntityRef;
+            else
+                throw new Exception(string.Format("El campo Decision Admision: {0} no existe", rechazado.DecisionAdmision));
+
+            _xrmServerConnection.Update(op);
+            _OpportunityRepository.DeactivateOportunity(Opportunity.EntityLogicalName, (Guid)op.OpportunityId);
+            #region Cerrar la oportunidad que le llego
+            try
+            {
+                var ops = _OpportunityRepository.RetrieveOportunidades(idCuenta, (Guid)op.OpportunityId);
+                if (ops != null && ops.Any())
+                {
+                    foreach (var opportunityToClose in ops)
+                    {
+                        _OpportunityRepository.DeactivateOportunity(Opportunity.EntityLogicalName, opportunityToClose);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CRMException(String.Format("Ha ocurrido un error al inactivar las oportunidades del solicitante: {0}", ex.ToString()));
+            }
+
+            #endregion
+            return true;
+
 
         }
         #endregion
@@ -619,116 +530,73 @@ namespace Baner.Recepcion.DataLayer
         #region Integracion 6 Inscrito
         public bool UpdateInscrito(Inscrito inscrito)
         {
-
-
             bool respuesta = false;
             Guid idOportunida = default(Guid);
-            // Opportunity OpInscrito = new Opportunity();
             var OpInscrito = GetOpenOpportunity(inscrito.id_Oportunidad);
-            // if (OpInscrito.OpportunityId != null)
+            //OpInscrito.ProcessId = new Guid();
+            //OpInscrito.StageId = new Guid();
+            #region Mapeo de campos
+            idOportunida = new Guid(inscrito.id_Oportunidad);
+            OpInscrito.OpportunityId = idOportunida;
+            OpInscrito.ua_pago_insc = ResolveFecha(inscrito.FechaPagoInscripcion);
+            #endregion
+            _xrmServerConnection.Update(OpInscrito);
+            //Fase 6 JC                
+            try
             {
-                #region Mapeo de campos
-
-                idOportunida = new Guid(inscrito.id_Oportunidad);
-
-                OpInscrito.OpportunityId = idOportunida;
-
-                OpInscrito.ua_pago_insc = ResolveFecha(inscrito.FechaPagoInscripcion);
-
-                #endregion
-
-
-                _xrmServerConnection.Update(OpInscrito);
-
-                string origenOp = OrigenOportundiad(idOportunida);
-                if (!string.IsNullOrWhiteSpace(origenOp))
+                if (vsVersionAvanceFase == "1")
                 {
-                    string SubOrigenOp = SubOrigenOportundiad(idOportunida);
-                    if (SubOrigenOp == "Oportunidad")
-                        //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
-                        ActualizarFaseCono("Inscrito", "Opportunity Sales Process", idOportunida);
-                    else
-                        //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
+                    string origen = OrigenOportundiad(idOportunida);
+                    if (origen != "3" && origen != "4")
                         ActualizarFaseCono("Inscrito", "Proceso de cliente potencial a ventas de la oportunidad", idOportunida);
+                    else
+                        ActualizarFaseCono("Inscrito", "Opportunity Sales Process", idOportunida);
                 }
-                else
-                {
-                    ActualizarFaseCono("Inscrito", "Opportunity Sales Process", idOportunida);
-                }
-
-
-                #region cambia de face
-
-
-
-                #endregion
-
-                //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
-                //ActualizarFaseCono("Inscrito", "Opportunity Sales Process", idOportunida);
-
-
-                return respuesta;
+                //Fase2
+                else if (vsVersionAvanceFase == "2")
+                    ActualizarFaseCono2(idOportunida, OrigenOportundiad(idOportunida));
             }
-
-
-
+            catch (Exception ex)
+            {
+                throw new CRMException(String.Format("Ha ocurrido un error al actualizar el stage a Inscrito {0}", ex.ToString()));
+            }
+            respuesta = true;
+            return respuesta;
         }
         #endregion
-
 
         #region Integracion 7 Seleccion Curso
         public bool UpdateNuevoIngreso(NuevoIngreso nuevoingreso)
         {
             bool res = false;
             Guid idOportunidad = default(Guid);
-
-
             var OpNuevoIngreso = GetOpenOpportunity(nuevoingreso.Id_Oportunidad);
-            //  if (op.OpportunityId != null)
+            idOportunidad = new Guid(nuevoingreso.Id_Oportunidad);
+            OpNuevoIngreso.ua_fecha_sel_curso = ResolveFecha(nuevoingreso.FechaSeleccionCursos);
+            //Actualiazmos los datos de la oportunidad en CRM
+            _xrmServerConnection.Update(OpNuevoIngreso);
+            //Fase 7 JC.
+            try
             {
-
-                //var OpNuevoIngreso = new Opportunity();
-                idOportunidad = new Guid(nuevoingreso.Id_Oportunidad);
-                //OpNuevoIngreso.OpportunityId = idOportunidad;
-                OpNuevoIngreso.ua_fecha_sel_curso = ResolveFecha(nuevoingreso.FechaSeleccionCursos);
-
-                //Actualiazmos los datos de la oportunidad en CRM
-                _xrmServerConnection.Update(OpNuevoIngreso);
-
-
-                string origenOp = OrigenOportundiad(idOportunidad);
-                if (!string.IsNullOrWhiteSpace(origenOp))
+                if (vsVersionAvanceFase == "1")
                 {
-                    //si biene nullo sabemos que la oportunidad surgio desde cuenta, no de banner ni prospecto
-                    string SubOrigenOp = SubOrigenOportundiad(idOportunidad);
-                    if (SubOrigenOp == "Oportunidad")
-                        //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
-                        ActualizarFaseCono("Nuevo ingreso", "Opportunity Sales Process", idOportunidad);
-                    else
-                        //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
+                    string origen = OrigenOportundiad(idOportunidad);
+                    if (origen != "3" && origen != "4")
                         ActualizarFaseCono("Nuevo ingreso", "Proceso de cliente potencial a ventas de la oportunidad", idOportunidad);
+                    else
+                        ActualizarFaseCono("Nuevo ingreso", "Opportunity Sales Process", idOportunidad);
                 }
-                else
-                {
-                    ActualizarFaseCono("Nuevo ingreso", "Opportunity Sales Process", idOportunidad);
-                }
-
-                #region cambia de face
-
-
-
-                #endregion
-
-                //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
-                //ActualizarFaseCono("Nuevo ingreso", "Opportunity Sales Process", idOportunidad);
-
-                //Cierra la oportunidad inscrita anuevo ingreso
-                _OpportunityRepository.CerrarOportunidadComoGanada(Opportunity.EntityLogicalName, idOportunidad);
-
-                res = true;
+                //Fase2
+                else if (vsVersionAvanceFase == "2")
+                    ActualizarFaseCono2(idOportunidad, OrigenOportundiad(idOportunidad));
             }
+            catch (Exception ex)
+            {
+                throw new CRMException(String.Format("Ha ocurrido un error al actualizar el stage a Nuevo ingreso {0}", ex.ToString()));
+            }
+            _OpportunityRepository.CerrarOportunidadComoGanada(Opportunity.EntityLogicalName, idOportunidad);
+            res = true;
             return res;
-
         }
         #endregion
 
@@ -800,6 +668,7 @@ namespace Baner.Recepcion.DataLayer
         {
             bool resultado = false;
             Guid idCuenta = default(Guid);
+            bool consultaPrepa = false;
 
             EntityReference vpd = GetIdReferencia(BusinessUnit.EntityLogicalName, "businessunitid", "name", datosPrepa.VPDI);
 
@@ -818,6 +687,7 @@ namespace Baner.Recepcion.DataLayer
 
                 cuenta.ua_colegio_procedencia = colegiop;
                 cuenta.ua_colegioguidstr = colegiop.Id.ToString();
+                consultaPrepa = true;
             }
 
 
@@ -844,7 +714,10 @@ namespace Baner.Recepcion.DataLayer
 
                 _xrmServerConnection.Update(op);
             }
-
+            if (!consultaPrepa)
+            {
+                throw new Exception("WARNING PREPA: La clave " + datosPrepa.Preparatoria + " del colegio de procedencia no se encontró en catálogo.");
+            }
             resultado = true;
 
             return resultado;
@@ -875,9 +748,9 @@ namespace Baner.Recepcion.DataLayer
                 //op.ua_programa_asesor = GetDatoAsesor(ua_programas_por_campus_asesor.EntityLogicalName, new EntityReference(ua_programaV2.EntityLogicalName, idPro), op.ua_codigo_campus, "ua_programas_por_campus_asesorid",
                 //    "ua_programas_por_campus", "ua_codigo_vpd", "ua_programas_por_campus_asesor");
                 //op.ua_programa_asesor = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPro), op.ua_codigo_campus, cambiaSolicitudAdmision.Campus, cambiaSolicitudAdmision.Programa);
-                op.ua_programa_asesor = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPro), 
+                op.ua_programa_asesor = RetrieveProgramaByCarreraWebAsesor(new EntityReference(ua_programaV2.EntityLogicalName, idPro),
                     vpdiEntityRef,
-                    cambiaSolicitudAdmision.Campus, 
+                    cambiaSolicitudAdmision.Campus,
                     cambiaSolicitudAdmision.Programa);
                 //op.ua_programa_asesor = GetDatoAsesor(ua_programas_por_campus_asesor.EntityLogicalName,
                 //       new EntityReference(ua_programaV2.EntityLogicalName, idPro),
@@ -1347,11 +1220,6 @@ namespace Baner.Recepcion.DataLayer
         public Guid CreatePreUniversitario(PreUniversitario preUniversitario)
         {
 
-
-
-
-
-
             Guid res = Guid.Empty;
             Lead Prospecto = new Lead();
 
@@ -1429,6 +1297,8 @@ namespace Baner.Recepcion.DataLayer
 
                 Prospecto.ua_codigo_delegacion = entityDelegacionM;
             }
+            if (!string.IsNullOrEmpty(preUniversitario.Periodo))
+                Prospecto.ua_periodo = _entityReferenceTransformer.GetPeriodo(preUniversitario.Periodo);
 
 
 
@@ -2114,10 +1984,20 @@ namespace Baner.Recepcion.DataLayer
             //respuestaIntegracion.Seguimientos = " idOportundiad Recibida " + pOportunidad.id_Oportunidad;
             if (!string.IsNullOrWhiteSpace(pOportunidad.id_Oportunidad))
             {
-                //respuestaIntegracion.Seguimientos += " entro Actualizar la oportunidad ";
                 id_OportunidadCreada = OportunityRepository.UpdateOportunidad(cuenta, new Guid(pOportunidad.id_Oportunidad), _entityReferenceTransformer, "");
+                if (vsVersionAvanceFase == "1")
+                {
+                    string origen = OrigenOportundiad(new Guid(pOportunidad.id_Oportunidad));
+                    if (origen != "3" && origen != "4")
+                        //if (!string.IsNullOrEmpty(origen))
+                        ActualizarFaseCono("Solicitante", "Proceso de cliente potencial a ventas de la oportunidad", new Guid(pOportunidad.id_Oportunidad));
+                    else
+                        ActualizarFaseCono("Solicitante", "Opportunity Sales Process", new Guid(pOportunidad.id_Oportunidad));
+                }
+                //Fase2
+                else if (vsVersionAvanceFase == "2")
+                    ActualizarFaseCono2(new Guid(pOportunidad.id_Oportunidad), OrigenOportundiad(new Guid(pOportunidad.id_Oportunidad)));
 
-                //ActualizarFaseCono("Solicitante", "Proceso de cliente potencial a ventas de la oportunidad", new Guid(pOportunidad.id_Oportunidad));
             }
             else//si no existe, se crea de cero
             {
@@ -2243,7 +2123,11 @@ namespace Baner.Recepcion.DataLayer
                     //Creamos una nueva oportunidad
                     //id_OportunidadCreada = OportunityRepository.CrearOportunidad(cuenta, id_Cuenta, _entityReferenceTransformer);
                     // ActualizarFaseCono("Solicitante", "Proceso de cliente potencial a ventas de la oportunidad", id_OportunidadCreada);
-                    ActualizarFaseCono("Solicitante", "Opportunity Sales Process", id_OportunidadCreada);
+                    if (vsVersionAvanceFase == "1")
+                        ActualizarFaseCono("Solicitante", "Opportunity Sales Process", id_OportunidadCreada);
+                    //Fase2
+                    else if (vsVersionAvanceFase == "2")
+                        ActualizarFaseCono2(id_OportunidadCreada, OrigenOportundiad(id_OportunidadCreada));
                     //respuestaIntegracion.Seguimientos += "   Creo una nueva oportundiad su id = " + id_OportunidadCreada;
 
 
@@ -2350,39 +2234,110 @@ namespace Baner.Recepcion.DataLayer
                 idOportunidad = new Guid(cambiofase.id_oportunidad);
             switch (cambiofase.Fase)
             {
+                //Avance de Fase
+                case 100:
+                    {
+                        string origenOpo = OrigenOportundiad(idOportunidad);
+                        ActualizarFaseCono2(idOportunidad, origenOpo);
+                        break;
+                        //Microsoft.Crm.Sdk.Messages.
+                    }
+                    //Guardar Fase Actual en variable.
+                case 101:
+                    var OpInscrito = GetOpenOpportunity(cambiofase.id_oportunidad);
+                    string origen100 = OrigenOportundiad(idOportunidad);
+                    #region Mapeo de campos
+                    //idOportunidad = new Guid(idOportunidad);
+                    OpInscrito.OpportunityId = idOportunidad;
+                    OpInscrito.ua_faseactual = ObtenerFaseActual(idOportunidad, origen100);
+                    #endregion
+                    _xrmServerConnection.Update(OpInscrito);
+                    break;
+                    //Corrección de Fases.
+                case 102:
+                    string origen101 = OrigenOportundiad(idOportunidad);
+                    CorreccionFases(idOportunidad, origen101);
+                    break;
 
                 case 31:
-                    string origen = OrigenOportundiad(idOportunidad);
-                    if (!string.IsNullOrEmpty(origen))
-                        ActualizarFaseCono("Solicitante", "Proceso de cliente potencial a ventas de la oportunidad", idOportunidad);
-                    else
-                        ActualizarFaseCono("Solicitante", "Opportunity Sales Process", idOportunidad);
+                    //if (vsVersionAvanceFase == "1")
+                    //{
+                    //    string origen = OrigenOportundiad(idOportunidad);
+                    //    if (origen != "3" && origen != "4")
+                    //        //if (!string.IsNullOrEmpty(origen))
+                    //        ActualizarFaseCono("Solicitante", "Proceso de cliente potencial a ventas de la oportunidad", idOportunidad);
+                    //    else
+                    //        ActualizarFaseCono("Solicitante", "Opportunity Sales Process", idOportunidad);
+                    //}
+                    ////Fase2
+                    //else if (vsVersionAvanceFase == "2")
+                    //    ActualizarFaseCono2(idOportunidad, OrigenOportundiad(idOportunidad));
                     res = true;
                     break;
                 case 4:
+                case 2:
+                case 3:
+                case 6:
+                case 7:
+
                     {
-                        //si el origen de la oportundiad es nullo o bacio, indica que nacio desde cuenta
-                        string origenOp = OrigenOportundiad(idOportunidad);
-                        if (!string.IsNullOrWhiteSpace(origenOp))
+                        ////si el origen de la oportundiad es nullo o bacio, indica que nacio desde cuenta
+                        //string origenOp = OrigenOportundiad(idOportunidad);
+                        //if (!string.IsNullOrWhiteSpace(origenOp))
+                        //{
+                        //    string SubOrigenOp = SubOrigenOportundiad(idOportunidad);
+                        //    if (SubOrigenOp == "Oportunidad")
+                        //        //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
+                        //        ActualizarFaseCono("Admitido", "Opportunity Sales Process", idOportunidad);
+                        //    else
+                        //        //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
+                        //        ActualizarFaseCono("Admitido", "Proceso de cliente potencial a ventas de la oportunidad", idOportunidad);
+
+
+                        //    res = true;
+                        //}
+                        //else
+                        //{
+                        //    ActualizarFaseCono("Admitido", "Opportunity Sales Process", idOportunidad);
+
+                        //}
+                        //Fase 4 JC
+                        string Stage = "";
+                        if (cambiofase.Fase == 2)
+                            Stage = "Solicitante";
+                        else if (cambiofase.Fase == 3)
+                            Stage = "Examinado";
+                        else if (cambiofase.Fase == 4)
+                            Stage = "Admitido";
+                        else if (cambiofase.Fase == 6)
+                            Stage = "Inscrito";
+                        else if (cambiofase.Fase == 7)
+                            Stage = "Nuevo ingreso";
+                        try
                         {
-                            string SubOrigenOp = SubOrigenOportundiad(idOportunidad);
-                            if (SubOrigenOp == "Oportunidad")
-                                //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
-                                ActualizarFaseCono("Admitido", "Opportunity Sales Process", idOportunidad);
-                            else
-                                //Cambiamos de fase para el proceso de creacion de nueva oportunidad  a la cuenta
-                                ActualizarFaseCono("Admitido", "Proceso de cliente potencial a ventas de la oportunidad", idOportunidad);
-
-
-                            res = true;
+                            if (vsVersionAvanceFase == "1")
+                            {
+                                string origen = OrigenOportundiad(idOportunidad);
+                                origen = OrigenOportundiad(idOportunidad);
+                                if (origen != "3" && origen != "4")
+                                    //if (!string.IsNullOrEmpty(origen))
+                                    ActualizarFaseCono(Stage, "Proceso de cliente potencial a ventas de la oportunidad", idOportunidad);
+                                else
+                                    ActualizarFaseCono(Stage, "Opportunity Sales Process", idOportunidad);
+                            }
+                            //Fase2
+                            else if (vsVersionAvanceFase == "2")
+                                ActualizarFaseCono2(idOportunidad, OrigenOportundiad(idOportunidad));
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            ActualizarFaseCono("Admitido", "Opportunity Sales Process", idOportunidad);
-
+                            throw new CRMException(String.Format("Ha ocurrido un error al actualizar el stage a Admitido{0}", ex.ToString()));
                         }
+                        break;
                     }
-                    break;
+
+                
+
 
             }
 
@@ -2493,7 +2448,7 @@ namespace Baner.Recepcion.DataLayer
             Prospecto.ua_codigo_vpd = becario.VPD;
 
             //Obtenes el programa pro campus en bace a el código de carrera que se recibe
-            if (!string.IsNullOrWhiteSpace(becario.Codigo))
+            if (!string.IsNullOrWhiteSpace(becario.Codigo) && becario.Campus != null)
             {
 
                 var programabycarrera = RetrieveProgramaByCarreraWeb(RetrivePrograma(becario.Codigo), Prospecto.ua_codigo_campus, out CodigoPrograma, becario.Campus, becario.Codigo);
@@ -2825,11 +2780,8 @@ namespace Baner.Recepcion.DataLayer
         private void ActualizarFaseCono(string stage, string proceso, Guid idOportunidad)
         {
             var bpm = new BusinessProcessManager();
-            //string stage = "Solicitante";
-            //string proceso = "Proceso de cliente potencial a ventas de la oportunidad";
             try
             {
-                //Guid IdOportunidad = (Guid)idOportunidadRegresar;
                 bpm.UpdateStage(proceso, stage, Opportunity.EntityLogicalName, idOportunidad);
             }
             catch (Exception ex)
@@ -2837,22 +2789,57 @@ namespace Baner.Recepcion.DataLayer
                 throw new CRMException(String.Format("ha ocurrido un error al actualizar el stage: {0}", ex.ToString()));
             }
         }
-
-        private void ActualizarFaseProspecto(string stage, string proceso, Guid idProspecto)
+        private void ActualizarFaseCono2(Guid idOportunidad, string Origen)
         {
             var bpm = new BusinessProcessManager();
-            //string stage = "Solicitante";
-            //string proceso = "Proceso de cliente potencial a ventas de la oportunidad";
             try
             {
-                //Guid IdOportunidad = (Guid)idOportunidadRegresar;
-                bpm.UpdateStage(proceso, stage, Lead.EntityLogicalName, idProspecto);
+                bpm.UpdateStage2(idOportunidad, Origen);
             }
             catch (Exception ex)
             {
-                throw new CRMException(String.Format("ha ocurrido un error al actualizar el stage: {0}", ex.ToString()));
+                throw new CRMException(String.Format("Ocurrió sl siguiente error en el proceso de Avance de Fase V2: {0}", ex.ToString()));
             }
         }
+        private void CorreccionFases(Guid idOportunidad, string Origen)
+        {
+            var bpm = new BusinessProcessManager();
+            try
+            {
+                bpm.correccionFasesProcesos(idOportunidad, Origen);
+            }
+            catch (Exception ex)
+            {
+                throw new CRMException(String.Format("Ocurrió sl siguiente error en el proceso de Avance de Fase V2: {0}", ex.ToString()));
+            }
+        }
+        private string ObtenerFaseActual(Guid idOportunidad, string Origen)
+        {
+            var bpm = new BusinessProcessManager();
+            try
+            {
+                return bpm.ObtenerFaseReal(idOportunidad, Origen);
+            }
+            catch (Exception ex)
+            {
+                return "Error: " + ex.Message;
+            }
+        }
+        //private void ActualizarFaseProspecto(string stage, string proceso, Guid idProspecto)
+        //{
+        //    var bpm = new BusinessProcessManager();
+        //    //string stage = "Solicitante";
+        //    //string proceso = "Proceso de cliente potencial a ventas de la oportunidad";
+        //    try
+        //    {
+        //        //Guid IdOportunidad = (Guid)idOportunidadRegresar;
+        //        bpm.UpdateStage(proceso, stage, Lead.EntityLogicalName, idProspecto);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new CRMException(String.Format("ha ocurrido un error al actualizar el stage: {0}", ex.ToString()));
+        //    }
+        //}
         private bool ExisteCuenta(string pIdbanner, out Guid idCuentaExiste)
         {
             Account cuent = new Account();
@@ -5027,7 +5014,7 @@ namespace Baner.Recepcion.DataLayer
             pCodigoPrograma = "";
             Guid idp = default(Guid);
             if (carreraWeb == null)
-                throw new LookupException("La carreara web es requerida para recuperar el programa");
+                throw new LookupException("La carrera web es requerida para recuperar el programa");
             if (Campus == null)
                 throw new LookupException("El Campus es requerido para recuperar el programa");
             EntityReference result = new EntityReference();
@@ -5075,7 +5062,7 @@ namespace Baner.Recepcion.DataLayer
 
             Guid idp = default(Guid);
             if (carreraWeb == null)
-                throw new LookupException("La carreara web es requerida para recuperar el programa");
+                throw new LookupException("La carrera web es requerida para recuperar el programa");
             if (Campus == null)
                 throw new LookupException("El Campus es requerido para recuperar el programa");
             EntityReference result = new EntityReference();

@@ -43,7 +43,7 @@ namespace Baner.Recepcion.BusinessTypes
         [MaxLength(180, ErrorMessage = "La longitud maxima del atributo {0} es de {1} caracteres.")]
         public string Descripcion { get; set; }
 
-        [Required(ErrorMessage = "El atributo {0} es requerido.")]
+        //[Required(ErrorMessage = "El atributo {0} es requerido.")]
         [MaxLength(3, ErrorMessage = "La longitud maxima del atributo {0} es de {1} caracteres.")]
         public string Campus { get; set; }
 

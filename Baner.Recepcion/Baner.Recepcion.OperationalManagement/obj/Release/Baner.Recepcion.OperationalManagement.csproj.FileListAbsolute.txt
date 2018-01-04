@@ -1,0 +1,5 @@
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\bin\Release\Baner.Recepcion.OperationalManagement.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\bin\Release\Baner.Recepcion.OperationalManagement.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\obj\Release\Baner.Recepcion.OperationalManagement.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\obj\Release\Baner.Recepcion.OperationalManagement.pdb
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.OperationalManagement\obj\Release\Baner.Recepcion.OperationalManagement.csprojResolveAssemblyReference.cache

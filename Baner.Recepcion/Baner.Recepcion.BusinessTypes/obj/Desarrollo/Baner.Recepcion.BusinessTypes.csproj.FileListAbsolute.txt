@@ -1,0 +1,3 @@
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\bin\Desarrollo\Baner.Recepcion.BusinessTypes.dll
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\obj\Desarrollo\Baner.Recepcion.BusinessTypes.csprojResolveAssemblyReference.cache
+E:\Desarrollos_CRM\Entregables BBP\ServiciosCRM\Baner.Recepcion\Baner.Recepcion.BusinessTypes\obj\Desarrollo\Baner.Recepcion.BusinessTypes.dll

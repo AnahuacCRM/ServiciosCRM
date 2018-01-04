@@ -11,6 +11,9 @@ using System.Web.Http;
 
 namespace Baner.Recepcion.Services.Controllers
 {
+    /// <summary>
+    /// Servicio 32 CRM.
+    /// </summary>
     public class srvCambioEstatusAlumnoController : ApiController
     {
         private readonly ILogger _logger;
